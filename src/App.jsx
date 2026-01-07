@@ -9,6 +9,7 @@ import { useState, useEffect } from "react"
 import { AnimatePresence, motion, MotionConfig } from "framer-motion"
 import { Hero } from "@/components/landing/Hero"
 import { Features } from "@/components/landing/Features"
+import { WhatIsImposter } from "@/components/landing/WhatIsImposter"
 import { HowItWorks } from "@/components/landing/HowItWorks"
 import { FAQ } from "@/components/landing/FAQ"
 import { Footer } from "@/components/landing/Footer"
@@ -65,6 +66,7 @@ function App() {
             <main>
               <Hero onStartGame={handleStartGame} />
               <Features />
+              <WhatIsImposter />
               <HowItWorks />
               <FAQ />
             </main>
