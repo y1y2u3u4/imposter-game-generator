@@ -1,132 +1,115 @@
 /**
- * Hero Section Component
+ * Hero Section Component - Redesigned
  * [INPUT]: None
- * [OUTPUT]: Hero section with headline and CTA
+ * [OUTPUT]: High-impact landing with cyberpunk aesthetics
  * [POS]: UI Layer - Landing Components
  */
 
 import { motion } from "framer-motion"
-import { ArrowDown, Sparkles, Users, Zap } from "lucide-react"
+import { ArrowRight, Sparkles, Users, Zap, Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { fadeInUp, staggerContainer, staggerItem, springs } from "@/lib/motion"
+import { springs } from "@/lib/motion"
 
 export function Hero({ onStartGame }) {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden gradient-mesh">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/10 blur-3xl"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full bg-accent/10 blur-3xl"
-          animate={{
-            x: [0, -40, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 pb-10">
+
+      {/* Background Ambience (Local) */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 blur-[120px] rounded-full mix-blend-screen" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-secondary/10 blur-[100px] rounded-full mix-blend-screen" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-          className="space-y-6"
-        >
-          {/* Badge */}
-          <motion.div variants={staggerItem}>
-            <Badge
-              variant="outline"
-              className="px-4 py-1.5 text-sm border-primary/50 bg-primary/10"
-            >
-              <Sparkles className="w-3 h-3 mr-2" />
-              Free Party Game Generator
-            </Badge>
-          </motion.div>
+      <div className="container relative z-10 mx-auto px-4 flex flex-col items-center text-center">
 
-          {/* Headline */}
+        {/* Animated Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-8"
+        >
+          <Badge variant="outline" className="px-4 py-2 bg-background/50 backdrop-blur border-primary/40 text-primary animate-pulse shadow-[0_0_15px_-5px_var(--primary)]">
+            <Sparkles className="w-3 h-3 mr-2 fill-primary" />
+            <span>The #1 Party Game Protocol</span>
+          </Badge>
+        </motion.div>
+
+        {/* Main Title with Layers */}
+        <div className="relative mb-6 group cursor-default">
           <motion.h1
-            variants={staggerItem}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
+            className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter"
           >
-            <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              Imposter Game
-            </span>
-            <br />
-            <span className="text-foreground">Generator</span>
+            <span className="bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent block">IMPOSTER</span>
+            <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent block mt-[-0.2em]">PROTOCOL</span>
           </motion.h1>
 
-          {/* Subheadline */}
-          <motion.p
-            variants={staggerItem}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
-          >
-            Create exciting word games for your party! Generate secret words,
-            find the imposter, and have endless fun with friends and family.
-          </motion.p>
+          {/* Decorative decorative lines/glitches */}
+          <div className="absolute -inset-4 border border-white/5 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-110 pointer-events-none" />
+        </div>
 
-          {/* Stats */}
-          <motion.div
-            variants={staggerItem}
-            className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground"
-          >
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
-              <span>3-20 Players</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-accent" />
-              <span>150+ Word Pairs</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-secondary" />
-              <span>5 Categories</span>
-            </div>
-          </motion.div>
-
-          {/* CTA Buttons */}
-          <motion.div
-            variants={staggerItem}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
-          >
-            <Button
-              size="lg"
-              onClick={onStartGame}
-              className="w-full sm:w-auto px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity text-lg"
-            >
-              Start Playing Free
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto px-8"
-              onClick={() => {
-                document
-                  .getElementById("how-it-works")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }}
-            >
-              Learn How to Play
-            </Button>
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-lg md:text-2xl text-muted-foreground max-w-2xl mb-12 leading-relaxed"
         >
-          <ArrowDown className="w-6 h-6 text-muted-foreground" />
+          Initiate the ultimate social deduction engine. <br className="hidden md:block" />
+          <span className="text-foreground font-semibold">150+ Word Pairs</span>. <span className="text-foreground font-semibold">5 Categories</span>. <span className="text-foreground font-semibold">Zero Trust</span>.
+        </motion.p>
+
+        {/* Action Area */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="flex flex-col sm:flex-row items-center gap-6"
+        >
+          <Button
+            size="lg"
+            onClick={onStartGame}
+            className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-[0_0_40px_-10px_var(--primary)] border border-white/20 hover:scale-105 transition-all duration-300 group"
+          >
+            <Play className="w-5 h-5 mr-2 fill-current" />
+            Initialize Game
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="lg"
+            className="h-14 px-8 text-lg rounded-full text-muted-foreground hover:text-white hover:bg-white/5"
+            onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+          >
+            Security Clearance
+          </Button>
         </motion.div>
+
+        {/* Floating Stats UI */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl"
+        >
+          {[
+            { label: "Active Players", value: "3-20", icon: Users, color: "text-primary" },
+            { label: "Database", value: "150+", icon: Zap, color: "text-accent" },
+            { label: "Latency", value: "0ms", icon: Play, color: "text-secondary" },
+            { label: "Cost", value: "FREE", icon: Sparkles, color: "text-success" }
+          ].map((stat, i) => (
+            <div key={i} className="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center hover:bg-white/5 transition-colors group">
+              <stat.icon className={`w-6 h-6 mb-2 ${stat.color} group-hover:scale-110 transition-transform`} />
+              <span className="text-2xl font-bold">{stat.value}</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-widest">{stat.label}</span>
+            </div>
+          ))}
+        </motion.div>
+
       </div>
     </section>
   )
