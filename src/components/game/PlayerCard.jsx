@@ -1,13 +1,13 @@
 /**
  * PlayerCard Component
  * [INPUT]: player (object), isRevealed (boolean), onReveal (function)
- * [OUTPUT]: Flip card showing player role and word
+ * [OUTPUT]: Holographic flip card showing player role
  * [POS]: UI Layer - Game Components
  */
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Eye, EyeOff, Skull, User } from "lucide-react"
+import { Eye, EyeOff, Skull, User, Fingerprint } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { springs } from "@/lib/motion"
 
@@ -27,7 +27,7 @@ export function PlayerCard({ player, isRevealed, onReveal }) {
 
   return (
     <motion.div
-      className="flip-card w-full aspect-[3/4] cursor-pointer"
+      className="flip-card w-full aspect-[4/5] cursor-pointer group"
       onClick={handleClick}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -44,97 +44,89 @@ export function PlayerCard({ player, isRevealed, onReveal }) {
         {/* Front - Hidden State */}
         <div
           className={cn(
-            "flip-card-front rounded-2xl p-6 flex flex-col items-center justify-center",
-            "bg-gradient-to-br from-card to-muted border border-border",
-            "shadow-lg hover:shadow-xl transition-shadow"
+            "flip-card-front rounded-2xl flex flex-col items-center justify-between p-6",
+            "bg-gradient-to-b from-card via-card/80 to-card/50 border border-white/5",
+            "shadow-lg backdrop-blur-sm"
           )}
         >
-          <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
-            <User className="w-8 h-8 text-primary" />
+          {/* Top ID */}
+          <div className="w-full flex justify-between items-center opacity-50 text-xs font-mono">
+            <span>ID-0{player.number}</span>
+            <div className="h-2 w-2 rounded-full bg-primary/50 animate-pulse" />
           </div>
-          <span className="text-xl font-bold text-foreground">
-            Player {player.number}
-          </span>
-          <div className="mt-4 flex items-center gap-2 text-muted-foreground">
-            <Eye className="w-4 h-4" />
-            <span className="text-sm">Tap to reveal</span>
+
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
+                <Fingerprint className="w-10 h-10 text-primary/70 group-hover:text-primary transition-colors" />
+              </div>
+            </div>
+            <span className="font-bold tracking-widest text-sm text-primary uppercase">Tap Declassify</span>
           </div>
+
+          {/* Bottom Bar */}
+          <div className="w-12 h-1 rounded-full bg-white/10" />
         </div>
 
         {/* Back - Revealed State */}
-        <motion.div
+        <div
           className={cn(
             "flip-card-back rounded-2xl p-6 flex flex-col items-center justify-center",
-            "border shadow-lg",
+            "border shadow-[0_0_30px_-5px]",
             isImposter
-              ? "bg-gradient-to-br from-destructive/20 to-destructive/10 border-destructive/50"
-              : "bg-gradient-to-br from-success/20 to-success/10 border-success/50"
+              ? "bg-destructive/10 border-destructive play-shadow-destructive"
+              : "bg-success/10 border-success shadow-success/20"
           )}
-          animate={
-            isImposter && isFlipped
-              ? {
-                  boxShadow: [
-                    "0 0 0 0 rgba(239, 68, 68, 0)",
-                    "0 0 20px 4px rgba(239, 68, 68, 0.3)",
-                    "0 0 0 0 rgba(239, 68, 68, 0)",
-                  ],
-                }
-              : {}
-          }
-          transition={
-            isImposter
-              ? { duration: 2, repeat: Infinity, ease: "easeInOut" }
-              : {}
-          }
+          style={{
+            boxShadow: isImposter ? 'inset 0 0 20px 0 var(--destructive)' : 'inset 0 0 20px 0 var(--success)'
+          }}
         >
           {/* Role Icon */}
           <div
             className={cn(
-              "w-16 h-16 rounded-full flex items-center justify-center mb-4",
-              isImposter ? "bg-destructive/30" : "bg-success/30"
+              "w-20 h-20 rounded-full flex items-center justify-center mb-6 border-4",
+              isImposter
+                ? "border-destructive bg-destructive/20 text-destructive"
+                : "border-success bg-success/20 text-success"
             )}
           >
             {isImposter ? (
-              <Skull className="w-8 h-8 text-destructive" />
+              <Skull className="w-10 h-10" />
             ) : (
-              <User className="w-8 h-8 text-success" />
+              <User className="w-10 h-10" />
             )}
           </div>
 
-          {/* Player Number */}
-          <span className="text-lg font-medium text-muted-foreground mb-2">
-            Player {player.number}
-          </span>
-
-          {/* Role Badge */}
+          {/* Role Text */}
           <span
             className={cn(
-              "px-3 py-1 rounded-full text-sm font-semibold mb-4",
-              isImposter
-                ? "bg-destructive text-destructive-foreground"
-                : "bg-success text-success-foreground"
+              "text-lg font-black tracking-widest mb-1",
+              isImposter ? "text-destructive" : "text-success"
             )}
           >
             {isImposter ? "IMPOSTER" : "CIVILIAN"}
           </span>
 
           {/* Secret Word */}
-          <div
-            className={cn(
-              "text-2xl font-bold text-center",
+          <div className="mt-4 mb-8 text-center">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground block mb-2">Secret Key</span>
+            <div className={cn(
+              "text-3xl font-bold px-4 py-2 rounded-lg bg-black/40 border border-white/5",
               isImposter ? "text-destructive" : "text-success"
-            )}
-          >
-            {player.word}
+            )}>
+              {player.word}
+            </div>
           </div>
 
           {/* Hide Hint */}
-          <div className="mt-4 flex items-center gap-2 text-muted-foreground">
-            <EyeOff className="w-4 h-4" />
-            <span className="text-sm">Tap to hide</span>
+          <div className="flex items-center gap-2 text-muted-foreground opacity-60 text-xs uppercase tracking-wider">
+            <EyeOff className="w-3 h-3" />
+            Tap to Conceal
           </div>
-        </motion.div>
+        </div>
       </div>
     </motion.div>
   )
 }
+

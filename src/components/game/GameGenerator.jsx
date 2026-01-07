@@ -1,15 +1,14 @@
 /**
- * GameGenerator Component
+ * GameGenerator Component - Premium Redesign
  * [INPUT]: None (self-contained)
- * [OUTPUT]: Complete game interface with settings and player cards
+ * [OUTPUT]: High-tech game interface
  * [POS]: UI Layer - Game Components
  */
 
 import { useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Shuffle, Play, RotateCcw, Users, UserX, Sparkles } from "lucide-react"
+import { Shuffle, Play, RotateCcw, Users, UserX, Sparkles, Settings2, Hash } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import {
@@ -38,20 +37,15 @@ export function GameGenerator() {
   const [currentPair, setCurrentPair] = useState(null)
 
   const generateGame = useCallback(() => {
-    // Get random word pair
     const [civilianWord, imposterWord] = getRandomPair(category)
     setCurrentPair({ civilian: civilianWord, imposter: imposterWord })
 
-    // Create player array
     const newPlayers = []
-
-    // Assign imposter positions randomly
     const imposterPositions = new Set()
     while (imposterPositions.size < imposterCount) {
       imposterPositions.add(Math.floor(Math.random() * playerCount))
     }
 
-    // Create players
     for (let i = 0; i < playerCount; i++) {
       const isImposter = imposterPositions.has(i)
       newPlayers.push({
@@ -71,9 +65,8 @@ export function GameGenerator() {
       const shuffled = [...prev]
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1))
-        ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+          ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
       }
-      // Reassign numbers after shuffle
       return shuffled.map((p, i) => ({ ...p, number: i + 1 }))
     })
   }, [])
@@ -87,55 +80,65 @@ export function GameGenerator() {
   const categories = getCategories()
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 space-y-8">
-      {/* Settings Panel */}
+    <div className="w-full max-w-6xl mx-auto space-y-8">
+
+      {/* Settings Phase */}
       <AnimatePresence mode="wait">
         {!gameStarted && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
             transition={springs.gentle}
+            className="glass-panel p-8 rounded-3xl border border-white/10 max-w-2xl mx-auto"
           >
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                  Game Settings
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Category Selection */}
-                <div className="space-y-2">
-                  <Label>Word Category</Label>
-                  <Select value={category} onValueChange={setCategory}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {categoryEmojis[cat]} {categoryLabels[cat]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/20 rounded-lg text-primary">
+                  <Settings2 className="w-6 h-6" />
                 </div>
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight">Mission Config</h2>
+                  <p className="text-muted-foreground text-sm">Configure parameters for deployment</p>
+                </div>
+              </div>
+            </div>
 
+            <div className="space-y-8">
+              {/* Category Selection */}
+              <div className="space-y-3">
+                <Label className="text-base text-white font-medium">Target Category</Label>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger className="w-full h-12 bg-white/5 border-white/10 text-lg hover:border-primary/50 transition-colors">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        <span className="flex items-center gap-2">
+                          <span>{categoryEmojis[cat]}</span>
+                          <span>{categoryLabels[cat]}</span>
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Player Count */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="flex items-center gap-2">
+                    <Label className="flex items-center gap-2 text-primary">
                       <Users className="w-4 h-4" />
-                      Players
+                      Agents
                     </Label>
-                    <Badge variant="secondary">{playerCount}</Badge>
+                    <Badge variant="outline" className="bg-primary/20 border-primary/50 text-white font-mono text-lg px-3 py-1">{playerCount}</Badge>
                   </div>
                   <Slider
                     value={[playerCount]}
                     onValueChange={([value]) => {
                       setPlayerCount(value)
-                      // Adjust imposter count if needed
                       if (imposterCount >= value) {
                         setImposterCount(Math.max(1, value - 2))
                       }
@@ -145,20 +148,16 @@ export function GameGenerator() {
                     step={1}
                     className="w-full"
                   />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>3</span>
-                    <span>20</span>
-                  </div>
                 </div>
 
                 {/* Imposter Count */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="flex items-center gap-2">
-                      <UserX className="w-4 h-4 text-destructive" />
+                    <Label className="flex items-center gap-2 text-destructive">
+                      <UserX className="w-4 h-4" />
                       Imposters
                     </Label>
-                    <Badge variant="destructive">{imposterCount}</Badge>
+                    <Badge variant="outline" className="bg-destructive/20 border-destructive/50 text-white font-mono text-lg px-3 py-1">{imposterCount}</Badge>
                   </div>
                   <Slider
                     value={[imposterCount]}
@@ -168,23 +167,20 @@ export function GameGenerator() {
                     step={1}
                     className="w-full"
                   />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>1</span>
-                    <span>{Math.min(3, playerCount - 2)}</span>
-                  </div>
                 </div>
+              </div>
 
-                {/* Start Button */}
-                <Button
-                  onClick={generateGame}
-                  size="lg"
-                  className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Start Game
-                </Button>
-              </CardContent>
-            </Card>
+              {/* Start Button */}
+              <Button
+                onClick={generateGame}
+                size="lg"
+                className="w-full h-14 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all text-xl font-bold shadow-[0_0_30px_-5px_var(--primary)] mt-4"
+              >
+                <Play className="w-6 h-6 mr-3 fill-current" />
+                Initialize Protocol
+              </Button>
+
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -196,38 +192,49 @@ export function GameGenerator() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="space-y-6"
+            className="space-y-8"
           >
-            {/* Game Info */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-sm">
-                  {categoryEmojis[category]} {categoryLabels[category]}
-                </Badge>
-                <Badge variant="secondary" className="text-sm">
-                  {playerCount} Players
-                </Badge>
-                <Badge variant="destructive" className="text-sm">
-                  {imposterCount} Imposter{imposterCount > 1 ? "s" : ""}
-                </Badge>
+            {/* HUD / Status Bar */}
+            <div className="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 border border-white/5">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
+                  <span className="text-2xl">{categoryEmojis[category]}</span>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground uppercase tracking-widest">Category</span>
+                    <span className="font-bold">{categoryLabels[category]}</span>
+                  </div>
+                </div>
+
+                <div className="h-10 w-[1px] bg-white/10 hidden sm:block" />
+
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-primary" />
+                    <span className="font-mono">{playerCount} Agents</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <UserX className="w-4 h-4 text-destructive" />
+                    <span className="font-mono text-destructive">{imposterCount} Imposter{imposterCount > 1 ? 's' : ''}</span>
+                  </div>
+                </div>
               </div>
 
               {/* Controls */}
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={shufflePlayers}>
+              <div className="flex gap-3">
+                <Button variant="outline" size="sm" onClick={shufflePlayers} className="border-white/10 hover:bg-white/5">
                   <Shuffle className="w-4 h-4 mr-2" />
                   Shuffle
                 </Button>
-                <Button variant="outline" size="sm" onClick={resetGame}>
+                <Button variant="outline" size="sm" onClick={resetGame} className="border-white/10 hover:bg-white/5 text-destructive hover:text-destructive">
                   <RotateCcw className="w-4 h-4 mr-2" />
-                  New Game
+                  Abort
                 </Button>
               </div>
             </div>
 
-            {/* Player Cards Grid */}
+            {/* Grid */}
             <motion.div
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
               variants={staggerContainer}
               initial="hidden"
               animate="visible"
@@ -251,19 +258,14 @@ export function GameGenerator() {
               ))}
             </motion.div>
 
-            {/* Game Tip */}
-            <Card className="bg-muted/30 border-border/30">
-              <CardContent className="py-4">
-                <p className="text-sm text-muted-foreground text-center">
-                  💡 <strong>Tip:</strong> Pass the device around. Each player
-                  taps their card to see their secret word, then taps again to
-                  hide it before passing.
-                </p>
-              </CardContent>
-            </Card>
+            <p className="text-center text-muted-foreground text-sm opacity-50">
+              Tap card to reveal intelligence. Double-tap/click again to conceal.
+            </p>
+
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   )
 }
+
