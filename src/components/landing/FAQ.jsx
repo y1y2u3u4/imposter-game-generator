@@ -12,7 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { viewport } from "@/lib/motion"
+import { viewport, staggerContainer, staggerItem } from "@/lib/motion"
 
 const faqs = [
   {
@@ -49,41 +49,51 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <section className="py-20 md:py-28 bg-background">
-      <div className="max-w-3xl mx-auto px-4">
+    <section className="py-20 md:py-32 bg-background relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+      <div className="max-w-6xl mx-auto px-4 relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewport}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Frequently Asked <span className="text-primary">Questions</span>
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-lg">
             Everything you need to know about the Imposter Game
           </p>
         </motion.div>
 
-        {/* Accordion */}
+        {/* Grid of FAQ Cards */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
           viewport={viewport}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          {faqs.map((faq, index) => (
+            <motion.div key={index} variants={staggerItem}>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem
+                  value={`item-${index}`}
+                  className="border border-border/50 bg-muted/20 hover:bg-muted/30 hover:border-primary/30 transition-all duration-300 rounded-2xl px-6"
+                >
+                  <AccordionTrigger className="text-left text-lg font-semibold py-6 hover:text-primary transition-colors">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>
