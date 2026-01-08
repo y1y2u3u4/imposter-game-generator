@@ -6,12 +6,12 @@
  */
 
 import { motion } from "framer-motion"
-import { ArrowRight, Sparkles, Users, Zap, Play } from "lucide-react"
+import { ArrowRight, Sparkles, Users, Zap, Play, UserPlus, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { springs } from "@/lib/motion"
 
-export function Hero({ onStartGame }) {
+export function Hero({ onStartGame, onCreateRoom, onJoinRoom }) {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 pb-10">
 
@@ -67,25 +67,49 @@ export function Hero({ onStartGame }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="flex flex-col sm:flex-row items-center gap-6"
+          className="flex flex-col items-center gap-6"
         >
+          {/* Primary: Single Player */}
           <Button
             size="lg"
             onClick={onStartGame}
             className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-[0_0_40px_-10px_var(--primary)] border border-white/20 hover:scale-105 transition-all duration-300 group"
           >
             <Play className="w-5 h-5 mr-2 fill-current" />
-            Initialize Game
+            Quick Game (Offline)
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
 
+          {/* Multiplayer Options */}
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={onCreateRoom}
+              className="h-12 px-6 rounded-full border-accent/50 text-accent hover:bg-accent/10 hover:border-accent transition-all"
+            >
+              <UserPlus className="w-4 h-4 mr-2" />
+              Create Room
+            </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={onJoinRoom}
+              className="h-12 px-6 rounded-full border-secondary/50 text-secondary hover:bg-secondary/10 hover:border-secondary transition-all"
+            >
+              <LogIn className="w-4 h-4 mr-2" />
+              Join Room
+            </Button>
+          </div>
+
           <Button
             variant="ghost"
-            size="lg"
-            className="h-14 px-8 text-lg rounded-full text-muted-foreground hover:text-white hover:bg-white/5"
+            size="sm"
+            className="text-muted-foreground hover:text-white hover:bg-white/5"
             onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
           >
-            Security Clearance
+            How does this work?
           </Button>
         </motion.div>
 
