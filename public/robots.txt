@@ -1,0 +1,11 @@
+# Robots.txt for Imposter Game Generator
+# https://impostergamegenerators.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://impostergamegenerators.com/sitemap.xml
+
+# Disallow API endpoints
+Disallow: /api/
