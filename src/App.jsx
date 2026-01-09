@@ -15,6 +15,7 @@ import { FAQ } from "@/components/landing/FAQ"
 import { Footer } from "@/components/landing/Footer"
 import { GameGenerator } from "@/components/game/GameGenerator"
 import { CreateRoomModal, JoinRoomModal, RoomLobby, MultiplayerGameView } from "@/components/room"
+import { Dashboard } from "@/components/dashboard"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Skull, Sparkles, Users, LogIn } from "lucide-react"
 import { leaveRoom, startGame as startRoomGame, getRoom, subscribeToRoom } from "@/services/roomService"
@@ -23,6 +24,7 @@ import { getRandomPair } from "@/data/wordPairs"
 
 function App() {
   const [showGame, setShowGame] = useState(false)
+  const [showDashboard, setShowDashboard] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   // F003/F004: Room state
@@ -42,15 +44,22 @@ function App() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // F004: Check URL for join code on mount
+  // F004: Check URL for join code on mount & dashboard view
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const code = params.get("join")
+    const view = params.get("view")
+
     if (code) {
       setJoinCode(code.toUpperCase())
       setShowJoinRoom(true)
       // Clean URL
       window.history.replaceState({}, "", window.location.pathname)
+    }
+
+    // Dashboard access via ?view=dashboard
+    if (view === "dashboard") {
+      setShowDashboard(true)
     }
   }, [])
 
@@ -308,6 +317,24 @@ function App() {
           onRoomJoined={handleRoomJoined}
           initialCode={joinCode}
         />
+
+        {/* SEO Dashboard Layer */}
+        <AnimatePresence>
+          {showDashboard && (
+            <motion.div
+              key="dashboard"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50"
+            >
+              <Dashboard onBack={() => {
+                setShowDashboard(false)
+                window.history.replaceState({}, "", window.location.pathname)
+              }} />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </MotionConfig>
