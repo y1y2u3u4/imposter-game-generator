@@ -17,7 +17,8 @@ import { GameGenerator } from "@/components/game/GameGenerator"
 import { CreateRoomModal, JoinRoomModal, RoomLobby, MultiplayerGameView } from "@/components/room"
 import { Dashboard } from "@/components/dashboard"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Skull, Sparkles, Users, LogIn } from "lucide-react"
+import { Logo } from "@/components/ui/Logo"
+import { ArrowLeft } from "lucide-react"
 import { leaveRoom, startGame as startRoomGame, getRoom, subscribeToRoom } from "@/services/roomService"
 import { isSupabaseConfigured } from "@/lib/supabase"
 import { getRandomPair } from "@/data/wordPairs"
@@ -232,12 +233,7 @@ function App() {
             >
               {/* Game Top Bar */}
               <div className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 glass-panel mt-4 mx-4 rounded-xl">
-                 <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/20 text-primary">
-                        <Skull className="w-5 h-5" />
-                    </div>
-                    <span className="font-bold text-lg tracking-tight">Imposter Protocol</span>
-                 </div>
+                 <Logo size="default" />
 
                  <Button
                     variant="ghost"
@@ -343,16 +339,13 @@ function App() {
 
 function Navbar({ scrolled }) {
     return (
-        <motion.header 
+        <motion.header
             className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'py-3' : 'py-6'}`}
         >
             <div className={`mx-auto max-w-6xl px-6 rounded-2xl transition-all duration-300 ${scrolled ? 'bg-background/50 backdrop-blur-xl border border-white/5 shadow-lg mx-4' : 'bg-transparent'}`}>
                 <div className="flex items-center justify-between h-14">
-                    <div className="flex items-center gap-2 font-bold text-xl tracking-tighter">
-                        <span className="text-primary">Imposter</span>
-                        <span className="text-foreground">.AI</span>
-                    </div>
-                    
+                    <Logo size="default" />
+
                     {/* Only show simplified nav for now, can expand later */}
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
                         <a href="#features" className="hover:text-primary transition-colors">Features</a>

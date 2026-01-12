@@ -1,0 +1,148 @@
+{
+  "project_name": "Imposter Game Generator",
+  "created_at": "2026-01-08T12:00:00Z",
+  "updated_at": "2026-01-08T14:00:00Z",
+  "version": "2.1.0",
+  "features": [
+    {
+      "id": "F001",
+      "name": "Card Lock After View",
+      "description": "After a player taps to view their identity card and confirms with 'I Remember' button, the card becomes permanently locked. In free mode, any card can be clicked; in sequential mode, only current player's card is clickable.",
+      "priority": "P0",
+      "status": "completed",
+      "started_at": "2026-01-08T14:00:00Z",
+      "completed_at": "2026-01-08T15:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F002",
+      "name": "Lock State Visual Indicator",
+      "description": "Add visual feedback showing that a card is locked - greyed out appearance with checkmark overlay, lock icon, and disabled interaction state. Clearly distinguish viewed vs unviewed cards.",
+      "priority": "P0",
+      "status": "completed",
+      "started_at": "2026-01-08T14:00:00Z",
+      "completed_at": "2026-01-08T15:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F013",
+      "name": "Sequential Mode Toggle",
+      "description": "Add a mode selector in game settings: 'Free Mode' (current behavior - all cards clickable) vs 'Sequential Mode' (only current player's card is enabled, others disabled until previous confirms). Sequential mode prevents any possibility of peeking.",
+      "priority": "P0",
+      "status": "completed",
+      "started_at": "2026-01-08T14:00:00Z",
+      "completed_at": "2026-01-08T15:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F007",
+      "name": "AI Image Generation Integration",
+      "description": "Integrate Gemini image generation API to create funny/quirky images for each word pair. Images should hint at the word while being humorous and slightly abstract. Use gemini-image skill.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T16:00:00Z",
+      "completed_at": "2026-01-08T17:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F008",
+      "name": "Image Style Selector",
+      "description": "Add a 'quirkiness level' slider in settings (Low/Medium/High or 1-5 scale) that controls how abstract/funny the generated images are. Higher = more distorted/humorous, Lower = more recognizable.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T16:00:00Z",
+      "completed_at": "2026-01-08T17:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F009",
+      "name": "Card Image Display",
+      "description": "Update PlayerCard component to display the generated image alongside the word. Image should be prominent but word remains the primary identifier. Show image on the revealed side of the card.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T16:00:00Z",
+      "completed_at": "2026-01-08T17:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F011",
+      "name": "Image Loading States",
+      "description": "Add skeleton/loading states while images are being generated. Handle error states gracefully with fallback to text-only mode. Show progress indicator during generation.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T16:00:00Z",
+      "completed_at": "2026-01-08T17:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F010",
+      "name": "Image Caching System",
+      "description": "Implement caching for generated images to avoid repeated API calls for the same word pairs. Store in localStorage or IndexedDB for offline availability and faster subsequent games.",
+      "priority": "P2",
+      "status": "completed",
+      "started_at": "2026-01-08T17:30:00Z",
+      "completed_at": "2026-01-08T17:50:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F012",
+      "name": "Pre-generate Image Option",
+      "description": "Option for host to pre-generate images before starting the game to ensure smooth gameplay without loading delays during card reveals. Show generation progress.",
+      "priority": "P2",
+      "status": "completed",
+      "started_at": "2026-01-08T17:30:00Z",
+      "completed_at": "2026-01-08T17:50:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F006",
+      "name": "Backend Infrastructure Setup",
+      "description": "Set up Supabase project for real-time room management. Configure Realtime subscriptions, create rooms table with room_code, host_id, settings, players, and game_state columns.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T18:00:00Z",
+      "completed_at": "2026-01-08T18:30:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F003",
+      "name": "Room Creation System",
+      "description": "Create room/lobby UI where host enters nickname, configures game settings, and generates a unique 4-6 character room code. Store room in Supabase with realtime subscription.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T18:30:00Z",
+      "completed_at": "2026-01-08T19:00:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F014",
+      "name": "QR Code Generation",
+      "description": "Generate QR code for room sharing using qrcode.react library. Display in invite modal alongside room code and copy link button. QR encodes the join URL.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T18:30:00Z",
+      "completed_at": "2026-01-08T19:00:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F004",
+      "name": "Room Join Flow",
+      "description": "Allow players to join a room via link (URL with room code) or by entering room code manually. Player enters nickname, gets assigned slot, sees realtime player list updates.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T18:30:00Z",
+      "completed_at": "2026-01-08T19:00:00Z",
+      "commit_hash": null
+    },
+    {
+      "id": "F005",
+      "name": "Identity Card Distribution",
+      "description": "When host starts the game, randomly assign roles (civilian/imposter) and words, then distribute to each connected player via Supabase realtime. Each player sees only their own card on their device.",
+      "priority": "P1",
+      "status": "completed",
+      "started_at": "2026-01-08T19:00:00Z",
+      "completed_at": "2026-01-08T20:30:00Z",
+      "commit_hash": null
+    }
+  ]
+}
