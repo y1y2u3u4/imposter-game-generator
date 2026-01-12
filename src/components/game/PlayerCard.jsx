@@ -162,7 +162,7 @@ export function PlayerCard({
           {/* F009: AI Generated Image */}
           {player.image && (
             <div className={cn(
-              "w-16 h-16 rounded-xl overflow-hidden mb-2 border-2",
+              "w-16 aspect-square rounded-xl overflow-hidden mb-2 border-2 flex-shrink-0",
               isImposter ? "border-destructive/50" : "border-success/50"
             )}>
               <img

@@ -274,5 +274,17 @@
     },
     "in_progress": [],
     "stop_reason": "unknown"
+  },
+  {
+    "timestamp": "2026-01-12T22:39:52.322333",
+    "type": "session_end",
+    "project": "/Users/zhanggongqing/project/孵化项目/imposter-game-generator",
+    "progress": {
+      "total": 14,
+      "completed": 14,
+      "percentage": 100
+    },
+    "in_progress": [],
+    "stop_reason": "unknown"
   }
 ]
