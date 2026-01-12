@@ -29,6 +29,12 @@ import {
 import { staggerContainer, staggerItem, springs } from "@/lib/motion"
 import { generateWordPairImages } from "@/services/imageGeneration"
 import { Switch } from "@/components/ui/switch"
+import {
+  trackGameGenerated,
+  trackCategorySelect,
+  trackImageGenerated,
+  trackCardFlip,
+} from "@/lib/analytics"
 
 // F008: Quirkiness level labels
 const QUIRKINESS_LABELS = {
@@ -83,9 +89,16 @@ export function GameGenerator() {
             civilian: result.civilian.imageUrl,
             imposter: result.imposter.imageUrl
           }
+          // Analytics: Track successful image generation
+          trackImageGenerated({ category, success: true })
+        } else {
+          // Analytics: Track failed image generation
+          trackImageGenerated({ category, success: false })
         }
       } catch (error) {
         console.error('Failed to generate images:', error)
+        // Analytics: Track failed image generation
+        trackImageGenerated({ category, success: false })
       }
 
       setIsGeneratingImages(false)
@@ -114,7 +127,15 @@ export function GameGenerator() {
     setPlayers(newPlayers)
     setGameStarted(true)
     setCurrentPlayerIndex(0) // F013: Reset current player index
-  }, [playerCount, imposterCount, category, enableImages, quirkiness])
+
+    // Analytics: Track game generation
+    trackGameGenerated({
+      playerCount,
+      imposterCount,
+      category,
+      gameMode,
+    })
+  }, [playerCount, imposterCount, category, enableImages, quirkiness, gameMode])
 
   const shufflePlayers = useCallback(() => {
     setPlayers((prev) => {
@@ -185,7 +206,10 @@ export function GameGenerator() {
               {/* Category Selection */}
               <div className="space-y-3">
                 <Label className="text-base text-white font-medium">Target Category</Label>
-                <Select value={category} onValueChange={setCategory}>
+                <Select value={category} onValueChange={(value) => {
+                  setCategory(value)
+                  trackCategorySelect(value)
+                }}>
                   <SelectTrigger className="w-full h-12 bg-white/5 border-white/10 text-lg hover:border-primary/50 transition-colors">
                     <SelectValue />
                   </SelectTrigger>
@@ -519,6 +543,11 @@ export function GameGenerator() {
                               : p
                           )
                         )
+                        // Analytics: Track card flip
+                        trackCardFlip({
+                          playerNumber: player.number,
+                          isImposter: player.role === 'imposter',
+                        })
                       }}
                       onLock={() => handleLockCard(player.number)}
                     />

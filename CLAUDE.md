@@ -14,6 +14,13 @@ Free online party word game generator for playing the "Imposter" (卧底词) gam
 ```
 src/
 ├── components/
+│   ├── analytics/      # Analytics integration
+│   │   └── AnalyticsProvider.jsx  # Script loader
+│   ├── dashboard/      # SEO metrics dashboard
+│   │   ├── Dashboard.jsx
+│   │   ├── MetricCard.jsx
+│   │   ├── Charts.jsx
+│   │   └── BacklinkTable.jsx
 │   ├── game/           # Game-specific components
 │   │   ├── PlayerCard.jsx    # Flip card for player words
 │   │   └── GameGenerator.jsx # Main game logic
@@ -27,8 +34,13 @@ src/
 ├── data/
 │   └── wordPairs.js    # 150+ word pairs across 5 categories
 ├── lib/
+│   ├── analytics.js    # Unified analytics (GA4, Plausible, Clarity)
+│   ├── supabase.js     # Supabase client
 │   ├── utils.js        # cn() utility
 │   └── motion.js       # Framer Motion presets
+├── services/
+│   ├── roomService.js  # Multiplayer room management
+│   └── imageGeneration.js  # AI image generation
 ├── index.css           # TailwindCSS + theme variables
 └── App.jsx             # Root component
 ```
@@ -80,3 +92,31 @@ npm run preview  # Preview production build
 - Target: "imposter game generator" (1.6K monthly searches)
 - Meta tags configured in index.html
 - Semantic HTML structure
+
+## Analytics Integration
+
+### Platforms
+| Platform | Purpose | Status |
+|----------|---------|--------|
+| **Google Analytics 4** | Full analytics, conversions | ✅ Integrated |
+| **Plausible** | Privacy-friendly, GDPR compliant | ✅ Integrated |
+| **Microsoft Clarity** | Session recordings, heatmaps | ✅ Integrated |
+
+### Environment Variables
+```bash
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+VITE_PLAUSIBLE_DOMAIN=impostergamegenerators.com
+VITE_CLARITY_PROJECT_ID=xxxxxxxxxx
+```
+
+### Tracked Events
+- `game_generated` - New game started
+- `card_flip` - Player views their word
+- `category_select` - Category changed
+- `image_generated` - AI image generation
+- `room_created` / `room_joined` - Multiplayer events
+
+### Debug (Development)
+```javascript
+window.__checkAnalytics()  // Check status of all platforms
+```
