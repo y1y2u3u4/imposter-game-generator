@@ -286,5 +286,53 @@
     },
     "in_progress": [],
     "stop_reason": "unknown"
+  },
+  {
+    "timestamp": "2026-01-12T22:51:22.490141",
+    "type": "session_end",
+    "project": "/Users/zhanggongqing/project/孵化项目/imposter-game-generator",
+    "progress": {
+      "total": 14,
+      "completed": 14,
+      "percentage": 100
+    },
+    "in_progress": [],
+    "stop_reason": "unknown"
+  },
+  {
+    "timestamp": "2026-01-13T16:35:00.234911",
+    "type": "session_end",
+    "project": "/Users/zhanggongqing/project/孵化项目/imposter-game-generator",
+    "progress": {
+      "total": 14,
+      "completed": 14,
+      "percentage": 100
+    },
+    "in_progress": [],
+    "stop_reason": "unknown"
+  },
+  {
+    "timestamp": "2026-01-13T16:45:39.852772",
+    "type": "session_end",
+    "project": "/Users/zhanggongqing/project/孵化项目/imposter-game-generator",
+    "progress": {
+      "total": 14,
+      "completed": 14,
+      "percentage": 100
+    },
+    "in_progress": [],
+    "stop_reason": "unknown"
+  },
+  {
+    "timestamp": "2026-01-13T17:39:14.311197",
+    "type": "session_end",
+    "project": "/Users/zhanggongqing/project/孵化项目/imposter-game-generator",
+    "progress": {
+      "total": 14,
+      "completed": 14,
+      "percentage": 100
+    },
+    "in_progress": [],
+    "stop_reason": "unknown"
   }
 ]

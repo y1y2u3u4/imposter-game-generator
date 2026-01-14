@@ -55,6 +55,15 @@ export function AnalyticsProvider({ children }) {
     if (initialized.current) return
     initialized.current = true
 
+    // Delay analytics loading to improve LCP and initial page load performance
+    const scheduleAnalytics = (callback) => {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(callback, { timeout: 3000 })
+      } else {
+        setTimeout(callback, 2500)
+      }
+    }
+
     const initAnalytics = async () => {
       // 1. Google Analytics 4
       if (GA_MEASUREMENT_ID) {
@@ -132,9 +141,10 @@ export function AnalyticsProvider({ children }) {
       }
     }
 
-    initAnalytics()
+    // Schedule analytics loading after page is interactive
+    scheduleAnalytics(initAnalytics)
 
-    // Track initial pageview
+    // Track initial pageview (deferred)
     trackPageview(window.location.pathname)
 
     // Listen for route changes (for SPA navigation)
