@@ -5,7 +5,7 @@
  * [POS]: App Layer - Root
  */
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, lazy, Suspense } from "react"
 import { AnimatePresence, motion, MotionConfig } from "framer-motion"
 import { Hero } from "@/components/landing/Hero"
 import { Features } from "@/components/landing/Features"
@@ -13,15 +13,32 @@ import { WhatIsImposter } from "@/components/landing/WhatIsImposter"
 import { HowItWorks } from "@/components/landing/HowItWorks"
 import { FAQ } from "@/components/landing/FAQ"
 import { Footer } from "@/components/landing/Footer"
-import { GameGenerator } from "@/components/game/GameGenerator"
-import { CreateRoomModal, JoinRoomModal, RoomLobby, MultiplayerGameView } from "@/components/room"
-import { Dashboard } from "@/components/dashboard"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/ui/Logo"
 import { ArrowLeft } from "lucide-react"
 import { leaveRoom, startGame as startRoomGame, getRoom, subscribeToRoom } from "@/services/roomService"
 import { isSupabaseConfigured } from "@/lib/supabase"
 import { getRandomPair } from "@/data/wordPairs"
+
+// Lazy load non-critical components for better mobile performance
+const GameGenerator = lazy(() => import("@/components/game/GameGenerator").then(m => ({ default: m.GameGenerator })))
+const Dashboard = lazy(() => import("@/components/dashboard").then(m => ({ default: m.Dashboard })))
+const CreateRoomModal = lazy(() => import("@/components/room").then(m => ({ default: m.CreateRoomModal })))
+const JoinRoomModal = lazy(() => import("@/components/room").then(m => ({ default: m.JoinRoomModal })))
+const RoomLobby = lazy(() => import("@/components/room").then(m => ({ default: m.RoomLobby })))
+const MultiplayerGameView = lazy(() => import("@/components/room").then(m => ({ default: m.MultiplayerGameView })))
+
+// Loading fallback component
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center h-full">
+      <div className="animate-pulse flex flex-col items-center gap-4">
+        <div className="w-12 h-12 rounded-full bg-primary/20" />
+        <div className="h-4 w-24 rounded bg-primary/10" />
+      </div>
+    </div>
+  )
+}
 
 function App() {
   const [showGame, setShowGame] = useState(false)
@@ -247,7 +264,9 @@ function App() {
 
               {/* Game Canvas */}
               <div className="flex-1 flex items-center justify-center p-4 md:p-8">
-                <GameGenerator />
+                <Suspense fallback={<LoadingFallback />}>
+                  <GameGenerator />
+                </Suspense>
               </div>
             </motion.div>
           )}
@@ -263,19 +282,21 @@ function App() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-50 bg-background"
             >
-              <RoomLobby
-                room={room}
-                playerId={playerId}
-                isHost={isHost}
-                onLeave={handleLeaveRoom}
-                onStartGame={handleStartMultiplayerGame}
-                onGameStarted={(roomData) => {
-                  // F005: Non-host players receive game start notification
-                  setRoom(roomData)
-                  setShowRoomLobby(false)
-                  setShowMultiplayerGame(true)
-                }}
-              />
+              <Suspense fallback={<LoadingFallback />}>
+                <RoomLobby
+                  room={room}
+                  playerId={playerId}
+                  isHost={isHost}
+                  onLeave={handleLeaveRoom}
+                  onStartGame={handleStartMultiplayerGame}
+                  onGameStarted={(roomData) => {
+                    // F005: Non-host players receive game start notification
+                    setRoom(roomData)
+                    setShowRoomLobby(false)
+                    setShowMultiplayerGame(true)
+                  }}
+                />
+              </Suspense>
             </motion.div>
           )}
         </AnimatePresence>
@@ -290,29 +311,35 @@ function App() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-50 bg-background"
             >
-              <MultiplayerGameView
-                room={room}
-                playerId={playerId}
-                onEndGame={handleEndMultiplayerGame}
-              />
+              <Suspense fallback={<LoadingFallback />}>
+                <MultiplayerGameView
+                  room={room}
+                  playerId={playerId}
+                  onEndGame={handleEndMultiplayerGame}
+                />
+              </Suspense>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* F003: Create Room Modal */}
-        <CreateRoomModal
-          isOpen={showCreateRoom}
-          onClose={() => setShowCreateRoom(false)}
-          onRoomCreated={handleRoomCreated}
-        />
+        <Suspense fallback={null}>
+          <CreateRoomModal
+            isOpen={showCreateRoom}
+            onClose={() => setShowCreateRoom(false)}
+            onRoomCreated={handleRoomCreated}
+          />
+        </Suspense>
 
         {/* F004: Join Room Modal */}
-        <JoinRoomModal
-          isOpen={showJoinRoom}
-          onClose={() => setShowJoinRoom(false)}
-          onRoomJoined={handleRoomJoined}
-          initialCode={joinCode}
-        />
+        <Suspense fallback={null}>
+          <JoinRoomModal
+            isOpen={showJoinRoom}
+            onClose={() => setShowJoinRoom(false)}
+            onRoomJoined={handleRoomJoined}
+            initialCode={joinCode}
+          />
+        </Suspense>
 
         {/* SEO Dashboard Layer */}
         <AnimatePresence>
@@ -324,10 +351,12 @@ function App() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-50"
             >
-              <Dashboard onBack={() => {
-                setShowDashboard(false)
-                window.history.replaceState({}, "", window.location.pathname)
-              }} />
+              <Suspense fallback={<LoadingFallback />}>
+                <Dashboard onBack={() => {
+                  setShowDashboard(false)
+                  window.history.replaceState({}, "", window.location.pathname)
+                }} />
+              </Suspense>
             </motion.div>
           )}
         </AnimatePresence>
